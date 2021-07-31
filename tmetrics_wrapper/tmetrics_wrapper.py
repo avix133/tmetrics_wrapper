@@ -1,4 +1,3 @@
-import datetime
 import json
 import logging
 import os
@@ -8,7 +7,7 @@ import click
 from src.api import TMetricsAPI
 from src.input_parser import TasksParser
 from src.time_entry_planner import TimeEntryPlanner
-from src.utils import config_logger
+from src.utils import config_logger, query_yes_no
 
 LOG = logging.getLogger(__name__)
 
@@ -20,7 +19,9 @@ _shared_options = [
     click.option('--user-token', default=os.environ.get('TMETRICS_TOKEN'), show_default=False, required=True,
                  help='User API token, you can generate it in TMetrics "My profile" section. Can be defined through env variable: TMETRICS_TOKEN'),
     click.option('--host', default='https://app.tmetric.com', help='TMetrics host.'),
-    click.option('--dry-run', is_flag=True, default=False, help='Do not make any API calls.')
+    click.option('--dry-run', is_flag=True, default=False, help='Do not make any API calls.'),
+    click.option('-v', '--verbose', is_flag=True, default=False, help='Enable debug logs.'),
+    click.option('-y', '--assume-yes', is_flag=True, default=False, help='Do not ask for confirmation.')
 ]
 
 

@@ -63,6 +63,8 @@ class WorkDay(object):
 
 class TimeEntryPlanner(object):
     def __init__(self, start_date: datetime.date, end_date: datetime.date, task_list: [Task]):
+        self.start_date = start_date
+        self.end_date = end_date
         self.workday_list = self._generate_workdays(start_date, end_date)
         self.task_list = self._split_tasks(task_list, len(self.workday_list))
 
@@ -102,12 +104,13 @@ class TimeEntryPlanner(object):
 
     def display_current_plan(self):
         LOG.debug('Displaying plan.')
+
         for workday in self.workday_list:
             print(workday)
             for task in workday.task_list:
                 print(task)
             print()
-        print(f'Total planned time: {self.get_total_planned_time().total_seconds() // 3600}h')
+        print(f'Planned {self.get_total_planned_time().total_seconds() // 3600}h for {self.start_date} - {self.end_date}')
 
     def plan(self) -> bool:
         remaining_task_list = sorted(self.task_list, key=lambda task: task.duration, reverse=True)
