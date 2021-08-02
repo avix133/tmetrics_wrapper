@@ -3,8 +3,6 @@ import logging
 
 import requests
 
-from src.time_entry_planner import Task
-
 LOG = logging.getLogger(__name__)
 
 
@@ -23,11 +21,6 @@ class TMetricsAPI(object):
     def get_projects(self) -> {}:
         LOG.debug(f'Getting projects')
         return self._request_get(url=f'{self._host}/api/v3/accounts/{self._account_id}/timeentries/projects')
-
-    def add_task_time_entry(self, task: Task):
-        LOG.debug(f'Adding task time entry {task}')
-        self.add_time_entry(project_id=task.project_id, note=task.note, start_time=task.start_date,
-                            end_time=task.end_date)
 
     def add_time_entry(self, project_id: int, note: str, start_time: datetime.datetime, end_time: datetime.datetime):
         data = {

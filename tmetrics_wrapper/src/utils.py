@@ -31,6 +31,15 @@ def config_logger(verbose: bool = False):
     logging.config.dictConfig(config=config)
 
 
+def add_click_options(options):
+    def _add_options(func):
+        for option in reversed(options):
+            func = option(func)
+        return func
+
+    return _add_options
+
+
 def query_yes_no(question, default="no"):
     """Ask a yes/no question via raw_input() and return their answer.
 
@@ -61,4 +70,4 @@ def query_yes_no(question, default="no"):
             LOG.debug(f'User answered: {default}')
             return valid[choice]
         else:
-            sys.stdout.write("Please respond with 'yes' or 'no' " "(or 'y' or 'n').\n")
+            sys.stdout.write("Please respond with 'yes' or 'no' (or 'y' or 'n').\n")
