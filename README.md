@@ -1,17 +1,30 @@
-# Get started
 
 ## Requirements
 Python: `3.8` or higher
 
-
+---
+## Getting started
 1. Clone this reporitory.
 2. Run: `pip install -r requirements.txt`
-3. Initialize configuration:
+3. Generate API key:
+- Log in to TMetrics
+- Click your name in the left bottom corner.
+- Select My Profile in the drop-down list.
+- On the My Profile page, click the Get new API token link.
+- Copy the newly created token.
+
+    _Note_: An API token will be valid for 1 year. If you generate a new token, the previous one becomes invalid.
+4. Get TMetrics account id:
+
+    Account ID can be found in TMetrics url, ex: https://app.tmetric.com/#/tracker/12345/ <br>
+    Account ID of this workspace is **12345**
+
+5. Initialize configuration:
 ```
 python3 tmetrics_wrapper/tmetrics_wrapper.py init-config --account-id <account-id> --user-token <your-token> --out-file config.json
 ```
-4. [Define your time entires](#defining-time-entries) in separate file.
-5. Run:
+6. [Define your time entires](#defining-time-entries) in separate file.
+7. Run:
 ```
 python3 tmetrics_wrapper/tmetrics_wrapper.py run --tasks-file <task-definition-file> --config-file config.json --account-id <account-id> --user-token <your-token>
 ```
