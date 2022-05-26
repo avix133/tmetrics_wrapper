@@ -126,7 +126,7 @@ class TimeBlocksPlanner(object):
             if not task.is_scheduled() and task.duration < workday.get_free_time():
                 if iteration == 0 and (
                         workday.has_similar_task(task) or task.duration > workday.get_free_time() - timedelta(
-                    minutes=20)):
+                    minutes=40)):
                     LOG.debug(
                         'Similar task is already scheduled in the same workday or extending optimal daily workhours. Waiting for better opportunity.')
                 else:

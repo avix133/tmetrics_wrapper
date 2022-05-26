@@ -13,7 +13,7 @@ python3 tmetrics_wrapper/tmetrics_wrapper.py init-config --account-id <account-i
 4. [Define your time entires](#defining-time-entries) in separate file.
 5. Run:
 ```
-python3 tmetrics_wrapper/tmetrics_wrapper.py run --tasks-file <task-definition-file> --config config.json --account-id <account-id> --user-token <your-token>
+python3 tmetrics_wrapper/tmetrics_wrapper.py run --tasks-file <task-definition-file> --config-file config.json --account-id <account-id> --user-token <your-token>
 ```
 
 All cli commands support `--help` flag.
