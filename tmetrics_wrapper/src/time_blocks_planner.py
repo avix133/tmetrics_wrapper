@@ -137,7 +137,7 @@ class TimeBlocksPlanner(object):
     def _split_tasks(task_list: [Task], default_split: int) -> [Task]:
         result: [Task] = []
         for task in task_list:
-            if task.requested_split > 1 and task.duration / task.requested_split < MAX_TASK_DURATION_TIMEDELTA:
+            if task.requested_split > 1 and task.duration / task.requested_split <= MAX_TASK_DURATION_TIMEDELTA:
                 LOG.debug(f'Splitting task {task} into requested split ({task.requested_split})')
                 for _ in range(task.requested_split):
                     new_task = copy.deepcopy(task)
