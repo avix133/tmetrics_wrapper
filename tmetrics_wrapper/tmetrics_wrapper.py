@@ -44,10 +44,10 @@ def init_config(verbose, account_id, user_token, host, out_file, dry_run, assume
     project_list = api.get_projects()
     config_projects = {}
     for project in project_list:
-        client_name = project.get("client").get("name")
+        client_name = project.get("client", {'name': None}).get("name")
         project_name = project.get("name")
         project_id = project.get("id")
-        key = f'{project_name}/{client_name}'
+        key = f'{project_name}/{client_name}' if client_name else project_name
         config_projects[key] = {"id": project_id, "alias": ""}
     config = {"projects": config_projects}
     LOG.info(f'Generated config:\n{config}')
@@ -60,7 +60,8 @@ def init_config(verbose, account_id, user_token, host, out_file, dry_run, assume
 @cli.command()
 @add_click_options(_shared_options)
 @click.option('--tasks-file', help='Path to your task definitons file', type=click.Path(exists=True), required=True)
-@click.option('--config-file', help='Path to your configuration', show_default=True, default='config.json', type=click.Path(exists=True), required=True)
+@click.option('--config-file', help='Path to your configuration', show_default=True, default='config.json',
+              type=click.Path(exists=True), required=True)
 def run(verbose, account_id, user_token, host, tasks_file, config_file, dry_run, assume_yes):
     config_logger(verbose=verbose)
     LOG.debug(f'Running for account id: {account_id} on host: {host}')
