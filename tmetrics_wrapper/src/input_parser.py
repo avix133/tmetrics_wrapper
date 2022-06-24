@@ -33,7 +33,7 @@ class TasksParser(object):
         if not task_list:
             raise ValueError("Empty task list.")
 
-        LOG.info('Task file parsed.')
+        LOG.debug('Task file parsed.')
         return start_date, end_date, task_list
 
     def _parse_task_line(self, line) -> Task:
