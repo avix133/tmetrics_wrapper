@@ -2,6 +2,8 @@ import copy
 import logging
 from datetime import datetime, time, timedelta
 
+import pandas
+
 from src.api import TMetricsAPI
 
 LOG = logging.getLogger(__name__)
@@ -9,7 +11,7 @@ LOG = logging.getLogger(__name__)
 WORKDAY_START_TIME = time(hour=8)
 WORKDAY_END_TIME = time(hour=17)
 MAX_TASK_DURATION_TIMEDELTA = timedelta(hours=8)
-PLANNING_ITERATIONS = 3
+PLANNING_ITERATIONS = 4
 
 
 class NotFullyPlannedException(Exception):
@@ -90,13 +92,18 @@ class TimeBlocksPlanner(object):
     def display_current_plan(self):
         LOG.debug('Displaying plan.')
 
+        data_frames = []
         for workday in self.workday_list:
-            print(workday)
-            for task in workday.task_list:
-                print(task)
-            print()
+            date = workday.start_date.date()
+            frame = pandas.DataFrame({f'{date} ({workday.get_occupied_time()})': [f'{task.note} ({task.duration})' for task in workday.task_list]})
+            data_frames.append(frame)
+
+        frames = pandas.concat(data_frames, axis=1)
+        print()
+        print(frames.to_markdown())
+
         print(
-            f'Planned {self.get_total_planned_time().total_seconds() // 3600}h for {self.start_date} - {self.end_date}')
+            f'Planned {self.get_total_planned_time().total_seconds() // 3600}h in total for {self.start_date} - {self.end_date}')
 
     def plan(self):
         remaining_task_list = sorted(self.task_list, key=lambda task: task.duration, reverse=True)
@@ -104,7 +111,7 @@ class TimeBlocksPlanner(object):
             LOG.debug(f'Planning ({i})')
             remaining_task_list = [task for task in remaining_task_list if not task.is_scheduled()]
             if not remaining_task_list:
-                LOG.info('Successfully planned all tasks.')
+                LOG.debug('Successfully planned all tasks.')
                 break
 
             for workday in reversed(self.workday_list) if i % 2 == 0 else self.workday_list:
@@ -123,8 +130,10 @@ class TimeBlocksPlanner(object):
     @staticmethod
     def _plan_workday(iteration, remaining_task_list, workday):
         for task in remaining_task_list:
-            if not task.is_scheduled() and task.duration < workday.get_free_time():
-                if iteration == 0 and (
+            LOG.debug(f'Free time: {workday.get_free_time()}, task duration {task.duration}')
+            if not task.is_scheduled() and (task.duration < workday.get_free_time()):
+                LOG.debug(f'Trying to schedule {task} into {workday}')
+                if iteration < (PLANNING_ITERATIONS - 2) and (
                         workday.has_similar_task(task) or task.duration > workday.get_free_time() - timedelta(
                     minutes=40)):
                     LOG.debug(
