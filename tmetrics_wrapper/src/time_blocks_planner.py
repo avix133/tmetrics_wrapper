@@ -3,6 +3,7 @@ import logging
 from datetime import datetime, time, timedelta
 
 import pandas
+from termcolor import colored
 
 from src.api import TMetricsAPI
 
@@ -10,6 +11,7 @@ LOG = logging.getLogger(__name__)
 
 WORKDAY_START_TIME = time(hour=8)
 WORKDAY_END_TIME = time(hour=17)
+AVG_WORKDAY_DURATION_HOUR = 8
 MAX_TASK_DURATION_TIMEDELTA = timedelta(hours=8)
 PLANNING_ITERATIONS = 4
 
@@ -95,15 +97,21 @@ class TimeBlocksPlanner(object):
         data_frames = []
         for workday in self.workday_list:
             date = workday.start_date.date()
-            frame = pandas.DataFrame({f'{date} ({workday.get_occupied_time()})': [f'{task.note} ({task.duration})' for task in workday.task_list]})
+            frame = pandas.DataFrame({f'{date} ({workday.get_occupied_time()})': [f'{task.note} ({task.duration})' for
+                                                                                  task in workday.task_list]})
             data_frames.append(frame)
 
         frames = pandas.concat(data_frames, axis=1)
         print()
         print(frames.to_markdown())
 
-        print(
-            f'Planned {self.get_total_planned_time().total_seconds() // 3600}h in total for {self.start_date} - {self.end_date}')
+        total_planned_time_hour = self.get_total_planned_time().total_seconds() // 3600
+        summary_printing_color = 'green'
+        if total_planned_time_hour / len(self.workday_list) != AVG_WORKDAY_DURATION_HOUR:
+            summary_printing_color = 'yellow'
+
+        print(colored(f'Planned {str(total_planned_time_hour)}h in total for {self.start_date} - {self.end_date}',
+                      summary_printing_color))
 
     def plan(self):
         remaining_task_list = sorted(self.task_list, key=lambda task: task.duration, reverse=True)
