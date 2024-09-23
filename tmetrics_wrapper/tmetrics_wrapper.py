@@ -51,7 +51,7 @@ def init_config(verbose, account_id, user_token, host, out_file, dry_run, assume
         config_projects[key] = {"id": project_id, "alias": ""}
     config = {"projects": config_projects}
     LOG.info(f'Generated config:\n{config}')
-    if query_yes_no(f'Wrtie to file? ({out_file})'):
+    if assume_yes or query_yes_no(f'Write to file? ({out_file})'):
         with open(out_file, 'w', encoding='utf-8') as file:
             LOG.info(f'Writing config to file: {out_file}')
             json.dump(config, file, indent=4, sort_keys=True)
@@ -73,6 +73,8 @@ def run(verbose, account_id, user_token, host, tasks_file, config_file, dry_run,
     parser = TasksParser(config)
     LOG.debug(f'Task definitions{tasks_definition_list}')
     for task_definition in tasks_definition_list:
+        if not task_definition:
+            LOG.warning('Empty task definition, skipping.')
         start_date, end_date, task_list = parser.parse(task_definition)
         planner = TimeBlocksPlanner(start_date, end_date, task_list)
         planner.plan()
