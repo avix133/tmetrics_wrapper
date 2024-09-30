@@ -3,9 +3,8 @@ import logging
 from datetime import datetime, time, timedelta
 
 import pandas
-from termcolor import colored
-
 from api import TMetricsAPI
+from termcolor import colored
 
 LOG = logging.getLogger(__name__)
 
