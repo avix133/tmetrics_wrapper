@@ -1,0 +1,12 @@
+line-length = 120
+target-version = 'py312'
+
+
+[lint]
+select = ["E", "F", "B", "I", "N", "SIM", "PL", "ARG", "Q", "RET", "S", "G", "UP"]
+ignore = ["G004"]
+per-file-ignores = {"*test/*" = ["S101", "PLR2004"]}
+
+[format]
+quote-style = "double"
+docstring-code-format = true
