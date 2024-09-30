@@ -1,7 +1,7 @@
 
 ## Requirements
-Python: `3.10` or higher
-Poetry: `1.8.0` or higher
+- python: `3.10` or higher
+- poetry: `1.8.0` or higher
 
 ---
 ## Getting started
