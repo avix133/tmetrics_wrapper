@@ -1,14 +1,15 @@
 
 ## Requirements
-Python: `3.8` or higher
+Python: `3.10` or higher
+Poetry: `1.8.0` or higher
 
 ---
 ## Getting started
 1. Clone this reporitory.
-2. Run: `pip install -r requirements.txt`
+2. Run: `poetry install`
 3. Generate API key:
 - Log in to TMetrics
-- Click your name in the left bottom corner.
+- Click your name in the right top corner.
 - Select My Profile in the drop-down list.
 - On the My Profile page, click the Get new API token link.
 - Copy the newly created token.
@@ -21,12 +22,12 @@ Python: `3.8` or higher
 
 5. Initialize configuration:
 ```
-python3 tmetrics_wrapper/tmetrics_wrapper.py init-config --account-id <account-id> --user-token <your-token> --out-file config.json
+poetry run tmetrics-wrapper init-config --account-id <account-id> --user-token <your-token> --out-file config.json
 ```
 6. [Define your time entires](#defining-time-entries) in separate file.
 7. Run:
 ```
-python3 tmetrics_wrapper/tmetrics_wrapper.py run --tasks-file <task-definition-file> --config-file config.json --account-id <account-id> --user-token <your-token>
+poetry run tmetrics-wrapper run --tasks-file <task-definition-file> --config-file config.json --account-id <account-id> --user-token <your-token>
 ```
 
 All cli commands support `--help` flag.
